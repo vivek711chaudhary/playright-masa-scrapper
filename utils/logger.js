@@ -54,7 +54,18 @@ const logStep = (stepName, message) => {
   }
 };
 
+// Add the logError function
+const logError = (message, error) => {
+  // Always log errors regardless of DEBUG setting
+  if (error && error.stack) {
+    logger.error(`${message}`, { stack: error.stack, timestamp: new Date().toISOString() });
+  } else {
+    logger.error(`${message}`, { details: error, timestamp: new Date().toISOString() });
+  }
+};
+
 module.exports = {
   logger,
-  logStep
+  logStep,
+  logError
 }; 
