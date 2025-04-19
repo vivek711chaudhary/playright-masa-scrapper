@@ -1,0 +1,48 @@
+# Dependency directories
+node_modules/
+package-lock.json
+
+# Build outputs
+lib/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Cache and temp directories
+.cache/
+.tmp/
+.temp/
+.coverage/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+mcp.json
+
+# Test files
+test-results/
+playwright-report/
+test-output/
+
+# Prophet service specific
+prophet-service/venv/
+prophet-service/__pycache__/
+prophet-service/*.pyc
+prophet-service/cache/
+prophet-service/prophet_service.log

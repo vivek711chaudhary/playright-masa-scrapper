@@ -1,0 +1,3 @@
+[submodule "prophet-services"]
+	path = prophet-services
+	url = https://github.com/vivek711chaudhary/prophet-services

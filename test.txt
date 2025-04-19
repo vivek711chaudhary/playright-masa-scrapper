@@ -1,0 +1,205 @@
+https://data.dev.masalabs.ai/api/v1/search/live/web/scrape
+{
+  "url": "https://google.com",
+  "format": "text"
+}
+{
+    "url": "https://google.com",
+    "metadata": {
+        "referrer": "origin",
+        "title": "Google"
+    },
+    "content": "Google\n\nBevor Sie zu Google weitergehen\n\n• Google-Dienste zu erbringen und zu betreiben\n• Ausfälle zu prüfen und Maßnahmen gegen Spam, Betrug und Missbrauch zu ergreifen\n• Daten zu Zielgruppeninteraktionen und Websitestatistiken zu erheben. Mit den gewonnenen Informationen möchten wir verstehen, wie unsere Dienste verwendet werden, und die Qualität dieser Dienste verbessern.\n\n• neue Dienste zu entwickeln und zu verbessern\n• Werbung auszuliefern und ihre Wirkung zu messen\n• je nach Ihren Einstellungen personalisierte Inhalte anzuzeigen\n• personalisierte Werbung anzuzeigen, abhängig von Ihren Einstellungen\n\n",
+    "title": "Unknown Title"
+}
+-----------
+https://data.dev.masalabs.ai/api/v1/search/extraction
+{
+  "userInput": "Find me the latest news about AI developments"
+}
+{
+    "searchTerm": "AI developments",
+    "thinking": "Okay, I need to figure out the best search term for Twitter/X based on the user's input. The user wrote, \"Find me the latest news about AI developments.\" \n\nFirst, I'll break down the sentence. The main goal is to find the latest news, so \"latest news\" is a key part. But since the user is asking for a search term, I should focus on the most relevant keywords that would yield the best results on Twitter/X.\n\nThe subject here is AI developments. \"AI\" is a common abbreviation for Artificial Intelligence, and it's widely used in tech discussions. \"Developments\" refers to new advancements or updates in the field. \n\nI should consider which of these terms is more likely to be used in hashtags or discussions on Twitter/X. \"AI\" is a popular hashtag and a broad term that covers various aspects, including developments. \"Developments\" alone might be too vague and not specific enough to yield focused results.\n\nSo, combining \"AI\" with \"developments\" makes sense because it narrows down the search to the specific area the user is interested in. Using both terms together should provide more relevant and up-to-date information on Twitter/X.\n\nI should make sure not to include the word \"X\" in the response and keep it concise, using only 1-3 keywords. In this case, \"AI developments\" is a two-word phrase that accurately captures the user's request.\n\nTherefore, the optimal search term would be \"AI developments.\""
+}
+----------------
+https://data.dev.masalabs.ai//api/v1/search/analysis
+{
+  "tweets": "I am really excited about the economy\nI am bullish on cryptocurrency",
+  "prompt": "Analyze the sentiment of these tweets"
+}
+{
+    "thinking": "Okay, so I need to analyze the sentiment of these two tweets. The first one says, \"I am really excited about the economy.\" That sounds positive. The word \"excited\" is a strong positive emotion. So, the sentiment here is definitely positive.\n\nThe second tweet is, \"I am bullish on cryptocurrency.\" \"Bullish\" is a term often used in finance to mean someone expects prices to rise, so that's also a positive sentiment. \n\nI should make sure I don't add any extra opinions, just state the facts based on the words used. Both tweets express positive feelings, one about the economy and the other about crypto. So the overall sentiment is positive in both cases.\n\nI need to present this clearly and concisely, pointing out the positive language in each tweet without any extra fluff.",
+    "analysis": "The sentiment of both tweets is positive. The first tweet expresses excitement about the economy, indicating a favorable outlook. The second tweet uses \"bullish,\" a term suggesting confidence in cryptocurrency's growth, further indicating optimism. Both reflect positive sentiments towards their respective subjects."
+}
+-----------
+https://data.dev.masalabs.ai/api/v1/search/similarity/twitter
+{
+  "query": "AI developments",
+  "keywords": [
+    "artificial intelligence",
+    "machine learning"
+  ],
+  "max_results": 100
+}
+[
+    {
+        "ID": 0,
+        "ExternalID": "1901771027941875853",
+        "Content": "1/3 🚨 SOLANA AI DATA METRICS 🚨 Solana AI MC: $2.23 Billion Trading Volume: $38.26 Million 🔥SOLANA TOP 3 AI TRENDING AGENTS🔥 1. Satan ( ) 2. AIXBT (AIXBT) 3. Aethir (ATH) ✨NEW PROJECT DISCOVERY✨ 1. LoomSync 2. https://t.co/c2lpSvCzMP 3.",
+        "Metadata": {
+            "author": "1892581093980917760",
+            "conversation_id": "1901771027941875853",
+            "created_at": "2025-03-17T23:02:00Z",
+            "lang": "ca",
+            "newest_id": "1902645379000385730",
+            "oldest_id": "1900212632537497691",
+            "possibly_sensitive": false,
+            "public_metrics": {
+                "BookmarkCount": 0,
+                "ImpressionCount": 0,
+                "LikeCount": 0,
+                "QuoteCount": 0,
+                "ReplyCount": 0,
+                "RetweetCount": 0
+            },
+            "tweet_id": 1901771027941876000,
+            "user_id": "1892581093980917760",
+            "username": ""
+        },
+        "Score": 0.85744274
+    },
+    {
+        "ID": 0,
+        "ExternalID": "1905618838512607568",
+        "Content": "@cryptomanran You are basically talking about Bittensor $TAO (network) and the 82 subnets (applications) build on it that are competing with the worlds best AI apps.",
+        "Metadata": {
+            "author": "1466627762660257796",
+            "conversation_id": "1905608964621922429",
+            "created_at": "2025-03-28T13:51:50Z",
+            "lang": "en",
+            "newest_id": "1905623255991329203",
+            "oldest_id": "1905616375105626193",
+            "possibly_sensitive": false,
+            "public_metrics": {
+                "BookmarkCount": 0,
+                "ImpressionCount": 0,
+                "LikeCount": 0,
+                "QuoteCount": 0,
+                "ReplyCount": 0,
+                "RetweetCount": 0
+            },
+            "tweet_id": 1905618838512607500,
+            "user_id": "1466627762660257796",
+            "username": ""
+        },
+        "Score": 0.85732794
+    },
+
+-------------
+[
+  {
+    "ID": 457299352909480600,
+    "ExternalID": "1912583552740262293",
+    "Content": "RT @SamdGreat01: You are good, and your mercy is forever \n\nHallelujah",
+    "Metadata": {
+      "author": "82409932",
+      "conversation_id": "1912583552740262293",
+      "created_at": "2025-04-16T19:07:07Z",
+      "lang": "en",
+      "newest_id": "1912583552740262293",
+      "oldest_id": "1912576689432822095",
+      "possibly_sensitive": false,
+      "public_metrics": {
+        "BookmarkCount": 0,
+        "ImpressionCount": 0,
+        "LikeCount": 0,
+        "QuoteCount": 0,
+        "ReplyCount": 0,
+        "RetweetCount": 10
+      },
+      "tweet_id": 1912583552740262400,
+      "user_id": "82409932",
+      "username": ""
+    },
+    "Score": 1
+  },
+  {
+    "ID": 457299352909480600,
+    "ExternalID": "1912583481659425082",
+    "Content": "@DJAL07 Don't worry bro you will recover it in next shot. you are good 👍",
+    "Metadata": {
+      "author": "1556156552788197376",
+      "conversation_id": "1912517980782547017",
+      "created_at": "2025-04-16T19:06:50Z",
+      "lang": "en",
+      "newest_id": "1912583552740262293",
+      "oldest_id": "1912576689432822095",
+      "possibly_sensitive": false,
+      "public_metrics": {
+        "BookmarkCount": 0,
+        "ImpressionCount": 0,
+        "LikeCount": 0,
+        "QuoteCount": 0,
+        "ReplyCount": 0,
+        "RetweetCount": 0
+      },
+      "tweet_id": 1912583481659425000,
+      "user_id": "1556156552788197376",
+      "username": ""
+    },
+    "Score": 1
+  },
+  
+
+above are the api endpoints responses :
+and this is the hacakthon details
+Masa Subnet 42, launched in August 2024, is our premiere real-time data layer for powering AI agents and applications. Real-time AI intelligence requires real-time data. Subnet 42 specializes in creating decentralized data pipelines and data storage (enterprise time series and vector store), providing an alternative to traditional centralized APIs.
+
+Here is a fact sheet on SN42.
+
+The Challenge:
+Objective: Build an innovative MCP (Model Context Protocol) plugin that can be featured in Masa's subnet 42. Your MCP plugin will deliver direct value by enhancing AI agent capabilities across the Bittensor ecosystem.
+
+What is MCP
+You can think of MCP as a USB-C port for AI applications and AI agents. Just as USB-C offers a standardized way to connect devices to various accessories, MCP standardizes how your AI apps connect to different data sources and tools. MCP ensures models evolve beyond static training data, improving relevance and accuracy by aligning outputs with situational needs.
+
+Static AI often fails in dynamic environments, leading to biased, outdated, or irrelevant results. MCP addresses this by embedding contextual awareness, enabling personalization (e.g., tailoring medical advice to patient history) and adaptability (e.g., adjusting autonomous vehicle decisions during storms). It also enhances transparency, helping models “explain” context-driven choices for regulatory compliance.
+
+Here is a great intro thread from @akshay_pachaar on MCP
+
+What is Subnet 42 Real-Time Data:
+Masa Subnet 42, launched in August 2024, is our premiere real-time data layer for powering AI agents and applications. Real-time AI intelligence requires real-time data. Subnet 42 specializes in creating decentralized data pipelines and data storage (enterprise time series and vector store), providing an alternative to traditional centralized APIs.
+
+Here is a fact sheet on SN42.
+
+Key Requirements
+The plugin can interface with data sources! There are bonus points for leveraging infrastructure or data sources that are relevant to the Bittensor ecosystem
+Must enhance AI context management capabilities
+Should be able to run as a standalone MCP through simple documentation and a brief video server for future integration into SN42
+Requires one example use case to be written in example code interacting with an LLM
+Resources
+MCP guides
+MCP submission repository
+Subnet 42 miner specifications
+Rewards Structure
+🥇 1st place: $2,500 🥈 2nd place: $1,250 🥉 3rd place: $750 4th place: $300 5th place: $200
+
+Deadline & Presentation: Submit your proposals by April 24, 2024.
+Winners Announced: April 25th, at the Endgame conference in Austin, Texas.
+Participants will submit their proposals and code via Subnet’s 42 dedicated submission portal, with finalists invited to demo their solutions live during the event (virtual or in person)
+
+Submissions Evaluation
+Technical implementation (40%)
+Innovation and originality (25%)
+Performance and efficiency (20%)
+Documentation and ease of integration (15%)
+MCP Guides: Developer Resources to Create MCP Plugins, Servers, or Clients
+Model Context Protocol – Concepts & Resources Overview: Explore the core concepts and resource handling in MCP. This documentation explains how MCP servers expose data (resources) to clients—a critical aspect when building context-rich plugins. View Documentation
+Introduction to the Model Context Protocol (MCP) Overview: This introductory page provides a high-level explanation of MCP’s architecture, its purpose, and the building blocks (tools, resources, prompts). It’s a must-read before diving into development. Learn More
+MCP Quickstart – Glama Blog Overview: A step-by-step quickstart guide for building your first MCP server. This resource walks you through setting up an MCP environment, deploying a sample server, and testing it with a client. Read the Quickstart
+The Model Context Protocol (MCP) Explained (YouTube Video) Overview: This video provides a concise explanation of MCP along with a cool code example. It’s perfect for visual learners who want a quick dive into how MCP servers and tools are structured. Watch on YouTube
+Model Context Protocol Explained as Simply as Possible Overview: A blog post by Sean Goedecke that breaks down MCP into simple terms. It offers insight into MCP’s plug-and-play nature—ideal for developers new to the protocol. Read the Post
+For questions find us here: https://discord.gg/m9zZUS48Jh
+
+---------------------------------------------
+what mcp we can make ?
