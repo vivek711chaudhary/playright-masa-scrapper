@@ -1,89 +1,101 @@
 #!/bin/bash
 
-# Color codes for better readability
+# Colors for output formatting
 RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Configuration - Modify these values as needed
-PROJECT_ID="playwright-mcp"
+# Configuration settings (change these based on your needs)
+PROJECT_ID="your-project-id"
 REGION="us-central1"
-SERVICE_NAME="playwright-mcp"
+SERVICE_NAME="mcp-playwright-service"
 MEMORY="4Gi"
 CPU="2"
-CONCURRENCY="80"
-TIMEOUT="300s"
-MIN_INSTANCES="0"
-MAX_INSTANCES="10"
-PORT="3000"
-SCRAPE_TIMEOUT="20000"
-BROWSER_TIMEOUT="60000"
-DOCKER_TAG="latest"
+CONCURRENCY="30"
+TIMEOUT="600s"
 
-# Print banner
-echo -e "${BLUE}==========================================${NC}"
-echo -e "${GREEN}Playwright MCP - Cloud Run Deployment${NC}"
-echo -e "${BLUE}==========================================${NC}"
+# Print with color
+print_color() {
+  printf "${2}${1}${NC}\n"
+}
+
+# Print step header
+print_step() {
+  print_color "\n=== ${1} ===" "${BLUE}"
+}
+
+# Check for errors
+check_error() {
+  if [ $? -ne 0 ]; then
+    print_color "ERROR: ${1}" "${RED}"
+    exit 1
+  fi
+}
 
 # Check if gcloud CLI is installed
 if ! command -v gcloud &> /dev/null; then
-    echo -e "${RED}Error: gcloud CLI is not installed. Please install it first.${NC}"
-    echo "Visit: https://cloud.google.com/sdk/docs/install"
-    exit 1
+  print_color "gcloud CLI not found. Please install it first: https://cloud.google.com/sdk/docs/install" "${RED}"
+  exit 1
 fi
 
-# Check if user is authenticated
-if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" &> /dev/null; then
-    echo -e "${YELLOW}You need to authenticate with Google Cloud${NC}"
-    gcloud auth login
+# Check if user is authenticated with gcloud
+print_step "Checking gcloud authentication"
+if ! gcloud auth list --filter=status:ACTIVE --format="value(account)" 2>/dev/null | grep -q "@"; then
+  print_color "You are not authenticated with gcloud. Please run 'gcloud auth login' first." "${RED}"
+  exit 1
 fi
 
-# Set the project
-echo -e "${BLUE}Setting project to: ${PROJECT_ID}${NC}"
-gcloud config set project $PROJECT_ID
+# Ask for project ID confirmation or custom value
+print_color "Current project ID setting: ${PROJECT_ID}" "${YELLOW}"
+read -p "Press Enter to use this project ID or type a new one: " input_project_id
+if [ -n "$input_project_id" ]; then
+  PROJECT_ID=$input_project_id
+fi
+
+# Set project
+print_step "Setting project to ${PROJECT_ID}"
+gcloud config set project ${PROJECT_ID}
+check_error "Failed to set project"
 
 # Build the Docker image
-echo -e "${BLUE}Building Docker image...${NC}"
-docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$DOCKER_TAG .
+print_step "Building Docker image"
+print_color "Building image: gcr.io/${PROJECT_ID}/${SERVICE_NAME}:latest" "${GREEN}"
+docker build -t gcr.io/${PROJECT_ID}/${SERVICE_NAME}:latest .
+check_error "Docker build failed"
 
 # Push the image to Google Container Registry
-echo -e "${BLUE}Pushing image to Google Container Registry...${NC}"
-docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:$DOCKER_TAG
+print_step "Pushing image to Google Container Registry"
+docker push gcr.io/${PROJECT_ID}/${SERVICE_NAME}:latest
+check_error "Failed to push Docker image"
 
 # Deploy to Cloud Run
-echo -e "${BLUE}Deploying to Cloud Run...${NC}"
-gcloud run deploy $SERVICE_NAME \
-  --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$DOCKER_TAG \
+print_step "Deploying to Cloud Run"
+print_color "Deploying service ${SERVICE_NAME} to region ${REGION}" "${GREEN}"
+gcloud run deploy ${SERVICE_NAME} \
+  --image gcr.io/${PROJECT_ID}/${SERVICE_NAME}:latest \
   --platform managed \
-  --region $REGION \
-  --memory $MEMORY \
-  --cpu $CPU \
-  --concurrency $CONCURRENCY \
-  --timeout $TIMEOUT \
-  --min-instances $MIN_INSTANCES \
-  --max-instances $MAX_INSTANCES \
-  --port $PORT \
-  --set-env-vars="SCRAPE_TIMEOUT=$SCRAPE_TIMEOUT,BROWSER_TIMEOUT=$BROWSER_TIMEOUT,DOCKER_CONTAINER=true" \
+  --region ${REGION} \
+  --memory ${MEMORY} \
+  --cpu ${CPU} \
+  --concurrency ${CONCURRENCY} \
+  --timeout ${TIMEOUT} \
   --allow-unauthenticated
+check_error "Deployment failed"
 
-# Check deployment status
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}Deployment successful!${NC}"
-    
-    # Get the service URL
-    SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --platform managed --region $REGION --format="value(status.url)")
-    
-    echo -e "${GREEN}Service URL: ${SERVICE_URL}${NC}"
-    echo -e "${YELLOW}MCP Endpoint: ${SERVICE_URL}/enhance-tweets-playwright${NC}"
-    echo -e "${YELLOW}API Endpoint: ${SERVICE_URL}/enhance-tweets-masa${NC}"
-    echo -e "${YELLOW}Health Check: ${SERVICE_URL}/health${NC}"
-    
-    echo -e "${BLUE}==========================================${NC}"
-    echo -e "${GREEN}Deployment Complete!${NC}"
-    echo -e "${BLUE}==========================================${NC}"
-else
-    echo -e "${RED}Deployment failed. Please check the logs.${NC}"
-    exit 1
-fi 
+# Get the service URL
+print_step "Deployment successful"
+SERVICE_URL=$(gcloud run services describe ${SERVICE_NAME} --platform managed --region ${REGION} --format="value(status.url)")
+check_error "Failed to get service URL"
+
+# Print success message with endpoints
+print_color "Deployment successful!" "${GREEN}"
+print_color "Service URL: ${SERVICE_URL}" "${BLUE}"
+print_color "MCP Endpoint: ${SERVICE_URL}/enhance-tweets-playwright" "${BLUE}"
+print_color "MASA API Endpoint: ${SERVICE_URL}/enhance-tweets-masa" "${BLUE}"
+print_color "Health Check: ${SERVICE_URL}/health" "${BLUE}"
+print_color "\nYou can monitor the service in the Google Cloud Console:" "${GREEN}"
+print_color "https://console.cloud.google.com/run/detail/${REGION}/${SERVICE_NAME}/metrics?project=${PROJECT_ID}" "${BLUE}"
+
+print_color "\nMake this script executable with: chmod +x deploy-cloud-run.sh" "${YELLOW}" 
