@@ -7,4 +7,7 @@ logs
 tests
 .env
 Dockerfile
-.dockerignore 
+.dockerignore
+# Prophet services (both variations of the directory name)
+prophet-service/
+prophet-services/ 

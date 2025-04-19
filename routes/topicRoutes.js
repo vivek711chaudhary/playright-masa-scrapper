@@ -12,7 +12,7 @@ const Validator = require('../utils/validator');
 const config = require('../utils/config');
 
 // At the top of the file, add a constant for the Prophet service URL
-const PROPHET_SERVICE_URL = 'http://34.45.252.228:8000';
+const PROPHET_SERVICE_URL = process.env.PROPHET_SERVICE_URL || 'http://34.45.252.228:8000';
 
 router.get('/topic/:topic/latest', validateRequest, async (req, res) => {
   const { topic } = req.params;

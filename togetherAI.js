@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const Together = require("together-ai");
 const { chromium } = require("playwright");
+const axios = require('axios');
 
 const app = express();
 app.use(express.json());
@@ -30,6 +31,56 @@ function logError(message, error) {
 const API_TIMEOUT = 30000; // 30 seconds for API calls
 const SCRAPE_TIMEOUT = 15000; // 15 seconds for scraping
 
+// Function to scrape URL (with fallback)
+async function scrapeUrl(url) {
+  try {
+    // Try launching with additional options for compatibility
+    const browser = await chromium.launch({ 
+      headless: true,
+      timeout: 60000, // 60 seconds for browser operations
+      channel: process.env.PLAYWRIGHT_CHROMIUM_CHANNEL || undefined,
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined
+    });
+    
+    try {
+      const page = await browser.newPage();
+      await page.goto(url, { 
+        waitUntil: "domcontentloaded",
+        timeout: SCRAPE_TIMEOUT 
+      });
+      
+      const pageContent = await page.evaluate(() => {
+        // Try to get article content first, fallback to body
+        return document.querySelector('article')?.innerText || document.body.innerText;
+      });
+      
+      return { content: pageContent, browser };
+    } catch (error) {
+      await browser.close();
+      throw error;
+    }
+  } catch (playwrightError) {
+    logError("Playwright scraping failed, falling back to HTTP request", playwrightError);
+    
+    // Fallback to HTTP request
+    const response = await axios.get(url, { 
+      timeout: SCRAPE_TIMEOUT,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+    
+    // Simple HTML to text conversion
+    let text = response.data;
+    text = text.replace(/<style([\s\S]*?)<\/style>/gi, '');
+    text = text.replace(/<script([\s\S]*?)<\/script>/gi, '');
+    text = text.replace(/<[^>]+>/gi, ' ');
+    text = text.replace(/\s+/g, ' ');
+    
+    return { content: text.trim(), browser: null };
+  }
+}
+
 // Enhanced Processing Endpoint
 app.post('/enhance-tweets', async (req, res) => {
   const { tweets, custom_instruction } = req.body;
@@ -39,14 +90,9 @@ app.post('/enhance-tweets', async (req, res) => {
   }
 
   logStep("START", `Processing ${tweets.length} tweets`);
+  let browser = null;
 
   try {
-    const browser = await chromium.launch({ 
-      headless: true,
-      timeout: 60000 // 60 seconds for browser operations
-    });
-    const page = await browser.newPage();
-    
     const enhancedTweets = [];
     
     for (const [index, tweet] of tweets.entries()) {
@@ -94,18 +140,17 @@ app.post('/enhance-tweets', async (req, res) => {
         researchUrl = researchUrl.split(' ')[0]; // Take only the first part if multiple words
         logStep("URL", `Selected URL: ${researchUrl}`);
 
-        // Step 3: Scrape the URL
+        // Step 3: Scrape the URL (with fallback)
         logStep("SCRAPE", `Navigating to ${researchUrl}...`);
         try {
-          await page.goto(researchUrl, { 
-            waitUntil: "domcontentloaded",
-            timeout: SCRAPE_TIMEOUT 
-          });
+          const { content: pageContent, browser: newBrowser } = await scrapeUrl(researchUrl);
           
-          const pageContent = await page.evaluate(() => {
-            // Try to get article content first, fallback to body
-            return document.querySelector('article')?.innerText || document.body.innerText;
-          });
+          // If we got a browser from scrapeUrl, store it so we can close it later
+          if (newBrowser) {
+            if (browser) await browser.close();
+            browser = newBrowser;
+          }
+          
           logStep("SCRAPE", `Scraped ${pageContent.length} characters`);
 
           // Step 4: Generate enhancement with custom instruction
@@ -169,7 +214,7 @@ app.post('/enhance-tweets', async (req, res) => {
       }
     }
     
-    await browser.close();
+    if (browser) await browser.close();
     logStep("COMPLETE", `Successfully processed ${enhancedTweets.length} tweets`);
     
     res.json({ 
@@ -179,6 +224,7 @@ app.post('/enhance-tweets', async (req, res) => {
     });
     
   } catch (error) {
+    if (browser) await browser.close();
     logError("Fatal error", error);
     res.status(500).json({ 
       success: false,

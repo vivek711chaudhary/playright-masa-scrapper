@@ -25,6 +25,7 @@ const config = {
   // API Keys
   togetherApiKey: process.env.TOGETHER_API_KEY,
   openAiApiKey: process.env.OPENAI_API_KEY,
+  MASA_API_KEY: process.env.MASA_API_KEY,
   
   // Twitter API configuration
   twitter: {
@@ -61,7 +62,11 @@ const config = {
   // Cache settings
   cache: {
     ttl: 60 * 60 // 1 hour
-  }
+  },
+
+  // Scraping timeouts
+  SCRAPE_TIMEOUT: 20000, // 20 seconds for page loading
+  BROWSER_TIMEOUT: 60000  // 60 seconds for browser operations
 };
 
 module.exports = config;

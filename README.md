@@ -1,6 +1,86 @@
-## Playwright MCP
+# Playwright MCP Content Scraper & Enhancer
 
-A Model Context Protocol (MCP) server that provides browser automation capabilities using [Playwright](https://playwright.dev). This server enables LLMs to interact with web pages through structured accessibility snapshots, bypassing the need for screenshots or visually-tuned models.
+A Model Context Protocol (MCP) server that provides browser automation capabilities using [Playwright](https://playwright.dev) with a focus on text content scraping and enhancement. This server enables LLMs to gather content from web pages and enhance text-based content with contextual information.
+
+## Key Features
+
+- **Content Scraping**: Extracts textual content from web pages using Playwright automation
+- **HTTP Fallback**: Automatically falls back to standard HTTP requests if browser automation fails
+- **Browser Pool Management**: Efficiently manages browser resources for parallel processing
+- **MCP Integration**: Seamlessly integrates with other MCP tools like the Masa API client
+- **Content Enhancement**: Augments content with additional context from web sources
+
+## Integration with Masa API Client (MCP-2)
+
+This Playwright MCP server is designed to work with the [Masa API Client (MCP-2)](https://github.com/yourusername/masa-api-client) to provide a complete solution for:
+
+1. Searching Twitter for relevant content via Masa API
+2. Scraping related web content via Playwright
+3. Enhancing the original content with the scraped information
+
+### Configuring Both MCP Servers
+
+When using both MCPs together, configure them in your VS Code or LLM application:
+
+```json
+{
+  "mcpServers": {
+    "masa": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/masa-api-client"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp"
+      ]
+    }
+  }
+}
+```
+
+### Example Workflow
+
+1. Use Masa API to search for tweets about a topic
+2. Extract URLs or generate search queries from the tweets
+3. Use Playwright MCP to scrape content from those URLs
+4. Enhance the original content with the scraped information
+
+## Installation
+
+### Command Line
+
+```bash
+npm install @playwright/mcp
+```
+
+### VS Code Integration
+
+Install the Playwright MCP server in VS Code using one of these buttons:
+
+[<img src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Server&color=0098FF" alt="Install in VS Code">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522playwright%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540playwright%252Fmcp%2540latest%2522%255D%257D)  [<img alt="Install in VS Code Insiders" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Server&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522playwright%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540playwright%252Fmcp%2540latest%2522%255D%257D)
+
+## Using for Content Scraping
+
+The primary APIs for content scraping are:
+
+```javascript
+// Scrape content from a URL with browser automation and fallback
+const content = await scrapeWithPlaywright(url);
+
+// Process multiple tweets by scraping related content
+const enhancedTweets = await handlePlaywrightEnhancement(tweets, custom_instruction);
+```
+
+## Deployment on Google Cloud Run
+
+Deploy this MCP to Google Cloud Run for integration with cloud-based systems:
+
+```bash
+./deploy-cloud-run.sh
+```
 
 ### Key Features
 
@@ -329,3 +409,61 @@ server.connect(transport);
 - **browser_install**
   - Description: Install the browser specified in the config. Call this if you get an error about the browser not being installed.
   - Parameters: None
+
+## Local Testing with Docker
+
+To test the application locally in a Docker container:
+
+```bash
+# Make the script executable if it's not already
+chmod +x scripts/test-local-docker.sh
+
+# Run the local Docker test
+./scripts/test-local-docker.sh
+```
+
+This will:
+1. Build a Docker image
+2. Run a container with the image
+3. Test the health endpoint
+4. Check Playwright verification
+5. Display information about the running container
+
+## Deploying to Google Cloud Run
+
+To deploy the application to Google Cloud Run:
+
+```bash
+# Set your GCP project ID
+export PROJECT_ID="your-gcp-project-id"
+
+# Make the script executable if it's not already
+chmod +x scripts/deploy-to-gcloud.sh
+
+# Run the deployment script
+./scripts/deploy-to-gcloud.sh
+```
+
+You can also configure other deployment parameters:
+
+```bash
+# Optional: customize deployment parameters
+export REGION="us-central1"
+export SERVICE_NAME="playwright-mcp"
+export MEMORY="2Gi"
+export CPU="1"
+export CONCURRENCY="80"
+export TIMEOUT="300s"
+
+# Run with custom parameters
+./scripts/deploy-to-gcloud.sh
+```
+
+### Configuration
+
+The system uses the following timeout configurations:
+
+- `SCRAPE_TIMEOUT`: 20000ms (20 seconds) - Controls the timeout for page loading
+- `BROWSER_TIMEOUT`: 60000ms (60 seconds) - Controls the timeout for browser operations
+
+These values can be modified in `utils/config.js` or overridden with environment variables in your deployment.
