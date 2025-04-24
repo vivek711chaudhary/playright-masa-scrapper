@@ -25,7 +25,7 @@ The server provides two main enhancement pathways:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/playright-masa-scrapper.git
+git clone https://github.com/vivek711chaudhary/playright-masa-scrapper.git
 
 # Install dependencies
 cd playright-masa-scrapper
